@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class SimpleProximityMonster : MonoBehaviour
 {
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip moveSound;
+
     [System.Serializable]
     public class ProximityTier
     {
@@ -91,6 +95,21 @@ public class SimpleProximityMonster : MonoBehaviour
         Transform chosen = tier[Random.Range(0, tier.Count)];
         transform.position = chosen.position;
         Debug.Log($"{name} moved to {chosen.name} (Tier {tierIndex})");
+
+        // 75% chance to play movement sound
+        if (audioSource != null && moveSound != null)
+        {
+            float chance = Random.value; // 0.0 to 1.0
+            if (chance <= 0.75f)
+            {
+                audioSource.PlayOneShot(moveSound);
+                Debug.Log("Monster movement sound played.");
+            }
+            else
+            {
+                Debug.Log("Monster moved silently.");
+            }
+        }
     }
 
     void ReachKillPoint()
